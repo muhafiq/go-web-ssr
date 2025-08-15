@@ -20,4 +20,5 @@ func ConnectDB() {
 	}
 
 	DB = db
+	log.Println("Database connected")
 }

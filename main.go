@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"go-web-ssr/internal/config"
+	"go-web-ssr/internal/controllers"
 	"log"
 	"net/http"
 
@@ -10,14 +10,21 @@ import (
 )
 
 func main() {
+	// init
 	if err := godotenv.Load(); err != nil {
 		log.Println("No .env file found, using system environment variables")
 	}
 
 	config.ConnectDB()
 	defer config.DB.Close()
+	dir := http.Dir("./public")
+	staticFileHandler := http.StripPrefix("/public/", http.FileServer(dir))
+	http.Handle("/public/", staticFileHandler)
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "Hello world")
-	})
+	// routes
+	http.HandleFunc("/", controllers.Use("GET", controllers.HomeView))
+	http.HandleFunc("/login", controllers.Use("GET", controllers.LoginView))
+
+	log.Println("HTTP Server start on http://localhost:8080")
+	http.ListenAndServe(":8080", nil)
 }
