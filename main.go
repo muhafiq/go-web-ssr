@@ -34,19 +34,30 @@ func main() {
 
 	// routes
 	http.HandleFunc("/", Chain(
-		middleware.Use(map[string]http.HandlerFunc{"GET": controllers.HomeView}),
+		controllers.Use(map[string]http.HandlerFunc{"GET": controllers.HomeView}),
 		middleware.Logger,
+		middleware.Session,
 	))
 	http.HandleFunc("/login", Chain(
-		middleware.Use(map[string]http.HandlerFunc{
+		controllers.Use(map[string]http.HandlerFunc{
 			"GET":  controllers.LoginView,
 			"POST": controllers.LoginUser,
 		}),
 		middleware.Logger,
+		middleware.Session,
+		middleware.Auth,
 	))
 	http.HandleFunc("/dashboard", Chain(
-		middleware.Use(map[string]http.HandlerFunc{"GET": controllers.DashboardView}),
+		controllers.Use(map[string]http.HandlerFunc{"GET": controllers.DashboardView}),
 		middleware.Logger,
+		middleware.Session,
+		middleware.Auth,
+	))
+	http.HandleFunc("/logout", Chain(
+		controllers.Use(map[string]http.HandlerFunc{"POST": controllers.LogoutUser}),
+		middleware.Logger,
+		middleware.Session,
+		middleware.Auth,
 	))
 
 	log.Println("HTTP Server start on http://localhost:8080")

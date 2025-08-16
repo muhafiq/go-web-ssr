@@ -8,7 +8,13 @@
     <h1 class="text-2xl font-bold text-center">Login to System</h1>
     <p class="text-center text-sm">Login so you can do CRUD operation</p>
   </div>
-
+  {{if .Errors}} {{range .Errors}}
+  <div
+    class="text-sm text-red-500 w-full bg-red-100 border border-red-400 rounded-md text-center p-4 shadow"
+  >
+    {{.}}
+  </div>
+  {{end}} {{end}}
   <div class="mb-4">
     <label class="block" for="email">Email</label>
     <input
