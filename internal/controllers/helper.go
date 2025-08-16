@@ -5,6 +5,11 @@ import (
 	"net/http"
 )
 
+/*
+This helper function use to render html template. But this function have a problem.
+It's slow because every request, it will read from file, not from memory.
+So this need to fix to cache the template to memory. But i'll do it later.
+*/
 func renderTemplate(w http.ResponseWriter, views string, data map[string]interface{}) {
 	tmpl, err := template.ParseFiles(
 		"views/layout.html",
@@ -22,11 +27,15 @@ func renderTemplate(w http.ResponseWriter, views string, data map[string]interfa
 	}
 }
 
-func Use(method string, handler http.HandlerFunc) http.HandlerFunc {
+/*
+`Use` function use to set http method directly when we register new route.
+*/
+func Use(methodHandlers map[string]http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		if r.Method != method {
-			http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		if handler, ok := methodHandlers[r.Method]; ok {
+			handler(w, r)
+			return
 		}
-		handler(w, r)
+		http.Error(w, "Method now allowed", http.StatusMethodNotAllowed)
 	}
 }
