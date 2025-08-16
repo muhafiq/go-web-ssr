@@ -6,8 +6,39 @@
     <title>{{ .Title }}</title>
     <link rel="stylesheet" href="/public/style.css" />
   </head>
-  <body>
-    {{ template "content" . }}
+  <body
+    class="bg-gradient-to-br from-sky-50 to-sky-100 text-gray-800 antialiased"
+  >
+    <header
+      class="w-full bg-sky-600 shadow-lg flex items-center justify-between px-12 py-4 sticky top-0 z-10"
+    >
+      <div>
+        <a
+          href="/"
+          class="font-extrabold text-xl text-white tracking-wide hover:text-lime-300 transition-colors duration-300"
+          >GO WEB SSR</a
+        >
+      </div>
+      <div>
+        <a
+          href="/login"
+          class="px-6 py-2 rounded-full bg-lime-400 font-medium shadow hover:bg-lime-600 transition-colors duration-300 hover:text-white"
+        >
+          Login
+        </a>
+      </div>
+    </header>
+
+    <main
+      class="container mx-auto max-w-6xl min-h-screen flex items-center justify-center px-4"
+    >
+      {{ template "content" . }}
+    </main>
+
+    <footer class="w-full bg-sky-600 py-4 text-center text-white mt-auto">
+      <p class="text-sm">&copy; 2025 GO WEB SSR. All rights reserved.</p>
+    </footer>
+
     <script src="/public/main.js"></script>
   </body>
 </html>
